@@ -1,12 +1,31 @@
-def most_efficient_cutting(bom):
-    return 0
+def barcode_reader(barcode):
+    return None
+
 
 if __name__ == '__main__':
-        assert(most_efficient_cutting([3000, 2200, 2000, 1800, 1600, 1300]) == 100)
-    assert (most_efficient_cutting([4000, 4000, 4000]) == 6000), "wasted: 2000x3"
-    assert(most_efficient_cutting([1]) == 5999), "5999"
-    assert(most_efficient_cutting([3001, 3001]) == 5998), "5900x2"
-    assert(most_efficient_cutting([3000, 2200, 1900, 1800, 1600, 1300]) == 200), "5900x2"
-    assert(most_efficient_cutting([3000]) == 3000)
-    assert(most_efficient_cutting([3000, 2200, 2000, 1800, 1600, 1400]) == 0)#These "asserts" using only for self-checking and not necessary for auto-testing
-    print('"Run" is good. How is "Check"?')
+    assert barcode_reader(
+        '_ _   _ __ _  ___ __  __  _  __ ____ _  ___ _ _ _ __  __ __ __  _    _ _ ___  _  ___ _   _  _ _'
+    ) == '5901234123457', '5901234123457'
+
+    assert barcode_reader(
+        '_ _  _  __  _ ___   _ __ _ ____   _  _  _   _ _ _ _ _    __  __ _    _ _ _    _ _    _  ___ _ _'
+    ) == '4299687613665', '4299687613665'
+
+    assert barcode_reader(
+        '_ _ ___ __  __  _  _  __ ____ _ _   __ __   _ _ _ _ _    _   _  _  _   ___ _  __  __ __ __  _ _'
+    ) is None, '0712345678912 : wrong check digit (right: 1)'
+
+    assert barcode_reader(
+        '___  _  __  _ ___   _ __ _ ____   _  _  _   _ _ _ _ _    __  __ _    _ _ _    _ _    _  ___ _ _'
+    ) is None, 'wrong left guard bar'
+    
+    assert barcode_reader(
+        '_ _  _  __  _ ___   _ __ _ ____   _  _  _   _ _ ___ _    __  __ _    _ _ _    _ _    _  ___ _ _'
+    ) is None, 'wrong center bar'
+
+    assert barcode_reader(
+        '_ _  _  __  _ ___   _ __ _ ____   _  _  _   _ _ _ _ _    __  __ _    _ _ _    _ _    _  ___ ___'
+    ) == None, 'wrong right guard bar'
+
+    print("Check done.")
+
