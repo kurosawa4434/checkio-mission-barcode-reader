@@ -1,0 +1,12 @@
+def most_efficient_cutting(bom):
+    return 0
+
+if __name__ == '__main__':
+        assert(most_efficient_cutting([3000, 2200, 2000, 1800, 1600, 1300]) == 100)
+    assert (most_efficient_cutting([4000, 4000, 4000]) == 6000), "wasted: 2000x3"
+    assert(most_efficient_cutting([1]) == 5999), "5999"
+    assert(most_efficient_cutting([3001, 3001]) == 5998), "5900x2"
+    assert(most_efficient_cutting([3000, 2200, 1900, 1800, 1600, 1300]) == 200), "5900x2"
+    assert(most_efficient_cutting([3000]) == 3000)
+    assert(most_efficient_cutting([3000, 2200, 2000, 1800, 1600, 1400]) == 0)#These "asserts" using only for self-checking and not necessary for auto-testing
+    print('"Run" is good. How is "Check"?')
