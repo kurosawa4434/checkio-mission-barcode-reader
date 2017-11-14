@@ -3,13 +3,13 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
     function (extIO, $, TableComponent) {
 
         function barcodeReaderCanvas(dom, dataInp, expl){
-            const PAPER_WIDTH = 225;
+            const PAPER_WIDTH = 245;
             const PAPER_HEIGHT = 165;
             const LEFT_MARGIN = 30;
             const TOP_MARGIN = 10;
             const BAR_HEIGHT_L = 110;
             const BAR_HEIGHT_S = 100;
-            const [answer, explanation] = expl;
+            const [answer, explanation, rv] = expl;
 
             var paper = Raphael(dom, 
                 PAPER_WIDTH,
@@ -50,35 +50,56 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
 
             // EAN number
             if (answer){
+
                 //1
-                paper.text(22, 110 + TOP_MARGIN, 
-                    answer.slice(0, 1)).attr(attr.text);
+                let fst_num_x = 22;
+                let left_answer = answer.slice(1, 7).split('');  
+                let right_answer = answer.slice(7, 13).split('');
+                let rv_deg = 0;
+                let num_y = 110;
+
+                if (rv){
+                    fst_num_x = 22 + 95*2 + 18;
+                    [left_answer, right_answer]
+                        = [right_answer.reverse(), left_answer.reverse()];
+                    rv_deg = 180;
+                    num_y = 0;
+                }
+
+                // 1
+                paper.text(fst_num_x, num_y + TOP_MARGIN, 
+                    answer.slice(0, 1)).attr(attr.text).rotate(rv_deg);
+
                 for (let i = 0; i < 6; i += 1){
-                    //2-7
-                    paper.text(45+i*14, 110 + TOP_MARGIN,
-                        answer.slice(i+1, i+2)).attr(attr.text);
-                    //8-13
-                    paper.text(135+i*14, 110 + TOP_MARGIN,
-                        answer.slice(i+7, i+8)).attr(attr.text);
+                    // 2-7
+                    paper.text(45+i*14, num_y + TOP_MARGIN,
+                        left_answer.slice(i, i+1)).attr(attr.text).rotate(
+                            rv_deg);
+                    // 8-13
+                    paper.text(135+i*14, num_y + TOP_MARGIN,
+                        right_answer.slice(i, i+1)).attr(attr.text).rotate(
+                            rv_deg);
                 }
             }
 
             for (let i = 0; i < r.length; i += 1 ){
                 let n = r[i].length * 2;
                 let height = BAR_HEIGHT_L;
+                let top_y = 0;
 
                 if (mod  >= (3)*2 + LEFT_MARGIN
                     && mod < (45)*2 + LEFT_MARGIN 
                     || mod >= (50)*2 + LEFT_MARGIN 
                         && mod < (92)*2 + LEFT_MARGIN){
                     height = BAR_HEIGHT_S;
+                    top_y = rv ? 10: 0;
                 }
 
                 // draw bar
                 if (r[i].slice(0, 1) === '_'){
                     paper.rect(
                         mod,
-                        0 + TOP_MARGIN, 
+                        top_y + TOP_MARGIN, 
                         n,
                         height 
                     ).attr(attr.rect).attr("fill", color.black);
@@ -86,9 +107,10 @@ requirejs(['ext_editor_io', 'jquery_190', 'raphael_210'],
 
                 mod += n;
             }
+
             // explanation text
-            paper.text(100, 135 + TOP_MARGIN,
-                explanation).attr(attr.text_exp);
+            const exp_text = paper.text(100, 135 + TOP_MARGIN,
+                                explanation).attr(attr.text_exp);
         }
 
         var $tryit;

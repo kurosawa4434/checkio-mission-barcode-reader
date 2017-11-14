@@ -31,6 +31,7 @@ def create_barcode_random():
 
     cd = 10 - sum(a*(1, 3)[i % 2] for i, a in enumerate(answer)) % 10
     cd = cd if cd < 10 else 0
+
     answer.append(cd)
 
     bar = ''.join([
@@ -42,15 +43,21 @@ def create_barcode_random():
                 '101'])
     bar = bar.translate(str.maketrans('01', ' _'))
 
-    return ''.join(map(str, answer)), bar
+    backward = bool(randint(0, 1));
+
+    if backward:
+        bar = bar[::-1]
+
+    return ''.join(map(str, answer)), bar, backward
 
 random_tests = []
+
 for _ in range(10):
-    answer, bar = create_barcode_random()
+    answer, bar, backward = create_barcode_random()
     random_tests.append({
-            'input': bar,
-            'answer': answer,
-            'explanation': [answer, '']
+                'input': bar,
+                'answer': answer,
+                'explanation': [answer, '', backward]
             })
 
 TESTS = {
@@ -58,22 +65,32 @@ TESTS = {
         {
             "input": '_ _   _ __ _  ___ __  __  _  __ ____ _  ___ _ _ _ __  __ __ __  _    _ _ ___  _  ___ _   _  _ _',
             "answer": '5901234123457',
-            "explanation": ['5901234123457', '']
+            "explanation": ['5901234123457', '', False]
         },
         {
             "input": '_ _   __ _ _  ___ ____ _   _ __  _ ___  ___ _ _ _ __  __ _  ___ _  ___ _ ___  _  _   _ _    _ _',
             "answer": '4003994155486',
-            "explanation": ['4003994155486', '']
+            "explanation": ['4003994155486', '', False]
         },
         {
             "input": '_ _ __   _ ___  _ ___ __ _  ___   _  _   _ __ _ _ __ __  _  _   _  _   __  __ _ _    __  __ _ _',
             "answer": '8557089288161',
-            "explanation": ['8557089288161', '']
+            "explanation": ['8557089288161', '', False]
         },
         {
             "input": '_ _ ___ __  __  _  _  __ ____ _ _   __ __   _ _ _ _ _    _   _  _  _   ___ _  __  __ __  __ _ _',
             "answer": '0712345678911',
-            "explanation": ['0712345678911', '']
+            "explanation": ['0712345678911', '', False]
+        },
+        {
+            "input": '_ _ __  __ __  __  _ ___   _  _  _   _    _ _ _ _ _   __ __   _ _ ____ __  _  _  __  __ ___ _ _',
+            "answer": '0712345678911',
+            "explanation": ['0712345678911', 'Scanned backwards', True]
+        },
+        {
+            "input": '_ _   _ __  __  _ _  ___  ___ _  _ ___ ___ __ _ _ _ _    _  ___ _    _ _ _    __  __ ___  _ _ _',
+            "answer": '3910497653610',
+            "explanation": ['3910497653610', 'Checksum zero case', False]
         },
         {
             "input": '_ _ __  __ __  __  _ ___   _  _  _   _    _ _ _ _ _   __ __   _ _ ____ __  _  _  __  __ ___ _ _',
@@ -88,22 +105,22 @@ TESTS = {
         {
             "input": '_ _ ___ __  __  _  _  __ ____ _ _   __ __   _ _ _ _ _    _   _  _  _   ___ _  __  __ __ __  _ _',
             "answer": None,
-            "explanation": ['0712345678912', 'wrong check digit']
+            "explanation": ['0712345678912', 'wrong check digit', False]
         },
         {
             "input": '___  _  __  _ ___   _ __ _ ____   _  _  _   _ _ _ _ _    __  __ _    _ _ _    _ _    _  ___ _ _',
             "answer": None,
-            "explanation": ['', 'wrong left guard bar']
+            "explanation": ['', 'wrong left guard bar', False]
         },
         {
             "input": '_ _  _  __  _ ___   _ __ _ ____   _  _  _   _ _ ___ _    __  __ _    _ _ _    _ _    _  ___ _ _',
             "answer": None,
-            "explanation": ['', 'wrong center bar']
+            "explanation": ['', 'wrong center bar', False]
         },
         {
             "input": '_ _  _  __  _ ___   _ __ _ ____   _  _  _   _ _ _ _ _    __  __ _    _ _ _    _ _    _  ___ ___',
             "answer": None,
-            "explanation": ['', 'wrong right guard bar']
+            "explanation": ['', 'wrong right guard bar', False]
         },
     ],
     "Randoms": random_tests
