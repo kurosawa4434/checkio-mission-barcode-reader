@@ -93,6 +93,11 @@ TESTS = {
             "explanation": ['3910497653610', 'Checksum zero case', False]
         },
         {
+            "input": '_ _ ___ __  __  _        ____ _ _   __ __   _ _ _ _ _    _   _  _  _   ___ _  __  __ __  __ _ _',
+            "answer": None,
+            "explanation": ['071 345678911', 'broken barcode', False]
+        },
+        {
             "input": '_ _ ___ __  __  _  _  __ ____ _ _   __ __   _ _ _ _ _    _   _  _  _   ___ _  __  __ __ __  _ _',
             "answer": None,
             "explanation": ['0712345678912', 'wrong check digit', False]
