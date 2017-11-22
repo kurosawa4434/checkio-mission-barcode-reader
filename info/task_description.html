@@ -14,6 +14,9 @@ The input is a String of length 95 representing the barcode. Each databit is dis
 <p>
 In the case of a barcode which does not conform to the specification, return None.
 </p>
+<p>
+The input final digit is the checksum. It is calculated from the other 12 digits, but in this mission it may be wrong. You must return None for this.
+</p>
 <div class="for_info_only">
     <p><strong>Example:</strong></p>
 <pre class="brush: python">
